@@ -7,8 +7,10 @@ import javax.security.auth.login.LoginException;
 
 public class Main extends ListenerAdapter {
 
-    private static final String DiscordToken = "";
+    private static final String DiscordToken = "NzU1MDc3NDM1Mjg4MDYwMDg1.X1-CqQ.0CmWdzx7MCbrUuq9fAGRJiSd8nE";
     private static JDA jda;
+
+    private final String commandBeginning = "!";
 
     public static void main(String[] args) throws LoginException {
         jda = JDABuilder.createDefault(DiscordToken).build();
@@ -27,8 +29,20 @@ public class Main extends ListenerAdapter {
                 event.getMessage().getContentDisplay()
         );
 
-        if(event.getMessage().getContentRaw().equals("!ping")) {
+        String message = event.getMessage().getContentDisplay().substring(this.commandBeginning.length());
+
+        messageResponse(event, message);
+    }
+
+    public void messageResponse(MessageReceivedEvent event, String message) {
+
+        if(message.toLowerCase().equals("ping")) {
             event.getChannel().sendMessage("Pong!").queue();
+        }
+
+        if(message.toLowerCase().equals("meme")) {
+            String meme = new APIHandler().MemeGenerator();
+            event.getChannel().sendMessage(meme).queue();
         }
     }
 }
