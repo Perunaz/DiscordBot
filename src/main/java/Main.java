@@ -1,3 +1,4 @@
+import music.JoinCommand;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -7,7 +8,7 @@ import javax.security.auth.login.LoginException;
 
 public class Main extends ListenerAdapter {
 
-    private static final String DiscordToken = "";
+    private static final String DiscordToken = "NzU1MDc3NDM1Mjg4MDYwMDg1.X1-CqQ.Jhl-dWEXyNzMyNlymKNww5jS2ZU";
     private static JDA jda;
 
     private final String commandBeginning = "!";
@@ -49,13 +50,18 @@ public class Main extends ListenerAdapter {
                     "```").queue();
         }
 
-        if(message.toLowerCase().equals("ping")) {
+        else if(message.toLowerCase().equals("ping")) {
             event.getChannel().sendMessage("Pong!").queue();
         }
 
-        if(message.toLowerCase().contains("sub ")) {
+        else if(message.toLowerCase().contains("sub ")) {
             String sub = new APIHandler().SubRedditImageGenerator(message.substring(4));
             event.getChannel().sendMessage(sub).queue();
+        }
+
+        else if(message.toLowerCase().contains("music")){
+            JoinCommand joinCommand = new JoinCommand();
+            joinCommand.joining(event);
         }
 
         else{

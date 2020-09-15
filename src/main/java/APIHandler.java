@@ -17,7 +17,7 @@ public class APIHandler {
 
             return imageUrl;
         } catch(Exception e){
-            return "Random sub image not found";
+            return "Random sub image not found.";
         }
     }
 
