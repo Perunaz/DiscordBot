@@ -1,5 +1,3 @@
-import java.util.Random;
-
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -8,28 +6,18 @@ import org.json.JSONObject;
 
 public class APIHandler {
 
-    private Random random;
-
     public APIHandler() {
-        this.random = new Random();
     }
 
-    public String MemeGenerator(){
+    public String SubRedditImageGenerator(String subReddit){
 
         try {
-            int memeRandom = this.random.nextInt(228);
-
-            JSONObject jsonObject = getAPI("http://alpha-meme-maker.herokuapp.com/memes/" + memeRandom + "/");
-            JSONObject jsonData = jsonObject.getJSONObject("data");
-            String imageUrl = jsonData.getString("image");
-
-            if(!imageUrl.contains(".jpg")){
-                MemeGenerator();
-            }
+            JSONObject jsonObject = getAPI("http://h2892166.stratoserver.net/api/meme/?subs=" + subReddit);
+            String imageUrl = jsonObject.getString("result");
 
             return imageUrl;
         } catch(Exception e){
-            return "Random meme not found";
+            return "Random sub image not found";
         }
     }
 

@@ -7,7 +7,7 @@ import javax.security.auth.login.LoginException;
 
 public class Main extends ListenerAdapter {
 
-    private static final String DiscordToken = "NzU1MDc3NDM1Mjg4MDYwMDg1.X1-CqQ.0CmWdzx7MCbrUuq9fAGRJiSd8nE";
+    private static final String DiscordToken = "";
     private static JDA jda;
 
     private final String commandBeginning = "!";
@@ -31,18 +31,35 @@ public class Main extends ListenerAdapter {
 
         String message = event.getMessage().getContentDisplay().substring(this.commandBeginning.length());
 
+        if(!event.getMessage().getContentDisplay().startsWith(commandBeginning)){
+            return;
+        }
+
         messageResponse(event, message);
     }
 
     public void messageResponse(MessageReceivedEvent event, String message) {
 
+        if(message.toLowerCase().equals("commands")) {
+            event.getChannel().sendMessage("```" +
+                    "!ping              |      Bot answers with Pong! \n" +
+                    "!sub subreddit     |      Get a random image from your selected subreddit(s),\n" +
+                    "                          Add a + to let it choose between more at once.\n" +
+                    "!commands          |      See all commands." +
+                    "```").queue();
+        }
+
         if(message.toLowerCase().equals("ping")) {
             event.getChannel().sendMessage("Pong!").queue();
         }
 
-        if(message.toLowerCase().equals("meme")) {
-            String meme = new APIHandler().MemeGenerator();
-            event.getChannel().sendMessage(meme).queue();
+        if(message.toLowerCase().contains("sub ")) {
+            String sub = new APIHandler().SubRedditImageGenerator(message.substring(4));
+            event.getChannel().sendMessage(sub).queue();
+        }
+
+        else{
+            event.getChannel().sendMessage("Didn't recognise this command, please use **!commands** to see which commands I have.").queue();
         }
     }
 }
