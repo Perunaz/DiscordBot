@@ -10,7 +10,7 @@ import java.awt.*;
 
 public class Main extends ListenerAdapter {
 
-    private static final String DiscordToken = "NzU1MDc3NDM1Mjg4MDYwMDg1.X1-CqQ.fZPWJRZ6DDk2Ab_16Wl9h3hHuDE";
+    private static final String DiscordToken = "";
     private static JDA jda;
     private MusicHandler musicHandler = new MusicHandler();
 
@@ -60,7 +60,7 @@ public class Main extends ListenerAdapter {
                     "                          Add a + to let it choose between more at once.\n" +
                     "!music play url    |      Let the bot play music from the url you choose.\n" +
                     "!music skip        |      Skips number currently playing.\n" +
-                    "!music leave       |      Bot leaves the voice channel." +
+                    "!music leave       |      Bot leaves the voice channel.\n" +
                     "!commands          |      See all commands." +
                     "```").queue();
         }
