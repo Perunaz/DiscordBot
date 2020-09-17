@@ -6,10 +6,11 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.security.auth.login.LoginException;
+import java.awt.*;
 
 public class Main extends ListenerAdapter {
 
-    private static final String DiscordToken = "NzU1MDc3NDM1Mjg4MDYwMDg1.X1-CqQ.fnqxR_T7VkSop_rUHpJadS306yg";
+    private static final String DiscordToken = "NzU1MDc3NDM1Mjg4MDYwMDg1.X1-CqQ.fZPWJRZ6DDk2Ab_16Wl9h3hHuDE";
     private static JDA jda;
     private MusicHandler musicHandler = new MusicHandler();
 
@@ -42,6 +43,10 @@ public class Main extends ListenerAdapter {
     }
 
     public void messageResponse(MessageReceivedEvent event, String[] message) {
+
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(new Color(66, 135, 245));
+
         boolean handled = handleMusicCommands(event, message);    // Voor alle muziek commands
         if (handled) {
             return;
@@ -50,23 +55,34 @@ public class Main extends ListenerAdapter {
         if(message[0].equals("commands")) {
             event.getChannel().sendMessage("```" +
                     "!ping              |      Bot answers with Pong! \n" +
+                    "!is joël gay?      |      Bot answers the question truthfully.\n" +
                     "!sub subreddit     |      Get a random image from your selected subreddit(s),\n" +
                     "                          Add a + to let it choose between more at once.\n" +
+                    "!music play url    |      Let the bot play music from the url you choose.\n" +
+                    "!music skip        |      Skips number currently playing.\n" +
+                    "!music leave       |      Bot leaves the voice channel." +
                     "!commands          |      See all commands." +
                     "```").queue();
         }
 
         else if(message[0].equals("ping")) {
-            event.getChannel().sendMessage("Pong!").queue();
+            eb.setTitle("Pong!");
+            event.getChannel().sendMessage(eb.build()).queue();
+        }
+
+        else if(message[0].toLowerCase().equals("is") && message[1].toLowerCase().equals("joël") && message[2].toLowerCase().equals("gay?")) {
+            eb.setTitle("Yes, Joël is 100% gay.");
+            event.getChannel().sendMessage(eb.build()).queue();
         }
 
         else if(message[0].equals("sub")) {
-            EmbedBuilder sub = new APIHandler().SubRedditImageGenerator(message[1]);
+            EmbedBuilder sub = new APIHandler().SubRedditImageGenerator(message[1], event);
             event.getChannel().sendMessage(sub.build()).queue();
         }
 
         else{
-            event.getChannel().sendMessage("Didn't recognise this command, please use **!commands** to see which commands I have.").queue();
+            eb.setTitle("Didn't recognise this command, please use !commands to see which commands I have.");
+            event.getChannel().sendMessage(eb.build()).queue();
         }
     }
 

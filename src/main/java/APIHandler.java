@@ -13,12 +13,10 @@ public class APIHandler {
     public APIHandler() {
     }
 
-    public EmbedBuilder SubRedditImageGenerator(String subReddit){
+    public EmbedBuilder SubRedditImageGenerator(String subReddit, MessageReceivedEvent event){
 
         EmbedBuilder eb = new EmbedBuilder();
-        EmbedBuilder eb2 = new EmbedBuilder();
         eb.setColor(new Color(66, 135, 245));
-        eb2.setColor(new Color(66, 135, 245));
 
         try {
             JSONObject jsonObject = getAPI("http://h2892166.stratoserver.net/api/meme/?subs=" + subReddit);
@@ -26,6 +24,12 @@ public class APIHandler {
             String title = jsonData.getString("title");
             String imageUrl = jsonData.getString("image");
             String upvotes = String.valueOf(jsonData.getInt("upvotes"));
+            boolean nsfw = jsonData.getBoolean("nsfw");
+
+            if(nsfw && !event.getTextChannel().isNSFW()){
+                eb.setTitle("Can't display NSFW content in a non NSFW channel.");
+                return eb;
+            }
 
             eb.setTitle(title);
             eb.setImage(imageUrl);
@@ -33,10 +37,10 @@ public class APIHandler {
 
             return eb;
 
-        } catch(Exception e){
-            eb2.setTitle("This sub probably doesn't exist, or I'm just a moron.");
+        } catch(NullPointerException e){
+            eb.setTitle("This sub probably doesn't exist, or I'm just a moron.");
 
-            return eb2;
+            return eb;
         }
     }
 
